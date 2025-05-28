@@ -4,7 +4,7 @@ import ffmpeg from 'fluent-ffmpeg';
 
 const storage = new Storage();
 
-const rawVideoBucketName = "alexcsh-yt-raw-videos";
+const rawVideoBucketName = "alexcsh-yt-raw-videos"; // has to be globablly unique
 const processedVideoBucketName = "alexcsh-yt-processed-videos";
 
 const localRawVideoPath = "./raw-videos";
@@ -23,13 +23,10 @@ export function setupDirectories() {
  * @param processedVideoName - The name of the file to convert to {@link localProcessedVideoPath}
  * @returns A promise that resolves when the video has been converted.
  */
-export function convertVideo(rawVideoName: string, processedVideoName: string, height: number) {
+export function convertVideo(rawVideoName: string, processedVideoName: string) {
     return new Promise<void>((resolve, reject) => {
-        if (isNaN(height) || height < 144 || height > 2160) {
-            throw new Error("Height must be a number between 144 and 2160");
-        }    
     
-        const scaleFilter = `scale=trunc(oh*a/2)*2:${height}`; 
+        const scaleFilter = `scale=trunc(oh*a/2)*2:360`; // convert to 360p for now
         const inputPath = `${localRawVideoPath}/${rawVideoName}`;
         const outputPath = `${localProcessedVideoPath}/${processedVideoName}`
 

@@ -28,7 +28,7 @@ app.post('/process-video', async (req, res) => {
 
    // Convert the video 
    try {
-    convertVideo(inputFileName, outputFileName, 360);
+    await convertVideo(inputFileName, outputFileName);
    } catch(err) {
     await Promise.all([
         deleteRawVideo(inputFileName),

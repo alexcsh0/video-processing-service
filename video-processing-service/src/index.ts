@@ -24,7 +24,19 @@ app.post('/process-video', async (req, res) => {
    const outputFileName = `processed-${inputFileName}`;
 
    // Download the raw video from Cloud Storage
-   await downloadRawVideo(inputFileName);
+   try {
+    await downloadRawVideo(inputFileName);
+  } catch (err: any) {
+    const isFileMissing = err.code === 404 || err.message.includes("No such object");
+    if (isFileMissing) {
+      console.warn(`File not found: ${inputFileName}. Skipping.`);
+      return res.status(200).send("File not found. Skipping.");
+    }
+  
+    console.error("Unexpected error while downloading file:", err);
+    return res.status(500).send("Error downloading video.");
+  }
+  
 
    // Convert the video 
    try {

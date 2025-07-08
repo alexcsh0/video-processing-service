@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./navbar.module.css";
 import SignIn from "./sign-in";
-import { onAuthStateChangedHelper } from "../../utilities/firebase";
+import { onAuthStateChangedHelper } from "../utilities/firebase";
 import { useState, useEffect } from "react";
 import { User } from "firebase/auth";
+import Upload from "./upload";
 
 export default function Navbar() {
     // init user state
@@ -29,7 +30,7 @@ export default function Navbar() {
                 </span>
             </Link>
             {
-                // TODO add upload button
+                user && <Upload />
             }
             <SignIn user={user}/>
         </nav>

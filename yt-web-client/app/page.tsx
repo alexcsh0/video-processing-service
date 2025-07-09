@@ -19,3 +19,6 @@ export default async function Home() {
     </main>
   )
 }
+
+export const revalidate = 30; // Disable caching for this page. Every 30 seconds, the page will be revalidated to fetch new data.
+

@@ -4,8 +4,8 @@ import ffmpeg from 'fluent-ffmpeg';
 
 const storage = new Storage();
 
-const rawVideoBucketName = "alexcsh-yt-raw-videos"; // has to be globablly unique
-const processedVideoBucketName = "alexcsh-yt-processed-videos";
+const rawVideoBucketName = process.env.RAW_VIDEOS_BUCKET || "alexcsh-yt-raw-videos";
+const processedVideoBucketName = process.env.PROCESSED_VIDEOS_BUCKET || "alexcsh-yt-processed-videos";
 
 const localRawVideoPath = "./raw-videos";
 const localProcessedVideoPath = "./processed-videos";
@@ -56,7 +56,11 @@ export async function downloadRawVideo(fileName: string) {
     await storage.bucket(rawVideoBucketName)
         .file(fileName)
         .download({ destination: `${localRawVideoPath}/${fileName}`});
-    
+
+    const rawFilePath = `${localRawVideoPath}/${fileName}`;
+    const rawFileSize = fs.statSync(rawFilePath).size;
+    console.log(`Raw video size for ${fileName}: ${rawFileSize} bytes`);
+
     console.log(
         `gs://${rawVideoBucketName}/${fileName} downloaded to ${localRawVideoPath}/${fileName}`
     );
@@ -73,7 +77,11 @@ export async function uploadProcessedVideo(fileName: string) {
 
     await bucket.upload(`${localProcessedVideoPath}/${fileName}`, {
         destination: fileName
-    })
+    });
+
+    const processedFilePath = `${localProcessedVideoPath}/${fileName}`;
+    const processedFileSize = fs.statSync(processedFilePath).size;
+    console.log(`Processed video size for ${fileName}: ${processedFileSize} bytes`);
 
     console.log(
         `${localProcessedVideoPath}/${fileName} uploaded to gs://${processedVideoBucketName}/${fileName}`

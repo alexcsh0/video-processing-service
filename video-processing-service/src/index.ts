@@ -1,13 +1,18 @@
 import express from "express";
 import { downloadRawVideo, setupDirectories, convertVideo, uploadProcessedVideo, deleteRawVideo, deleteProcessedVideo } from "./storage";
 import { isVideoNew, setVideo } from "./firestore";
+import * as admin from 'firebase-admin';
 
 setupDirectories();
 
 const app = express();
 app.use(express.json());
 
+const firestore = admin.firestore();
+
 app.post('/process-video', async (req, res) => {
+   const startTime = Date.now(); // Start time for processing
+
    // get bucket and filename from the Cloud Pub/Sub message
   try {
     const rawMessage = req.body?.message?.data;
@@ -52,8 +57,12 @@ app.post('/process-video', async (req, res) => {
     }
 
     // Convert the video 
+    let rawFileSize, processedFileSize;
     try {
       await convertVideo(inputFileName, outputFileName);
+      // Implement getFileSize if needed to retrieve file sizes
+      rawFileSize = 0; // Placeholder for raw file size
+      processedFileSize = 0; // Placeholder for processed file size
     } catch(err) {
       console.error(err);
       await Promise.all([
@@ -70,6 +79,20 @@ app.post('/process-video', async (req, res) => {
       status: 'processed',
       filename: outputFileName,
     })
+
+    const endTime = Date.now(); // End time
+    const processingTime = endTime - startTime;
+    console.log(`Processing time for video ${videoId}: ${processingTime}ms`);
+    console.log(`Video processed successfully: ${videoId}`);
+
+    await firestore.collection('metrics').add({
+      videoId,
+      rawFileSize,
+      processedFileSize,
+      processingTime,
+      status: 'success',
+      timestamp: new Date(),
+    });
 
     await Promise.all([
       deleteRawVideo(inputFileName),

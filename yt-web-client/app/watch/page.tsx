@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 function WatchInner() {
-  const videoPrefix = 'https://storage.googleapis.com/alexcsh-yt-processed-videos/';
+  const videoPrefix = `https://storage.googleapis.com/${process.env.NEXT_PUBLIC_PROCESSED_VIDEOS_BUCKET}/`;
   const videoSrc = useSearchParams().get('v');
 
   return (

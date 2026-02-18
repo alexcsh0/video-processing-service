@@ -92,7 +92,3 @@ Set environment variables for production deployment:
 - **Video Processing**: FFmpeg
 - **Authentication**: Firebase Auth
 - **Deployment**: Vercel (frontend), Google Cloud Run (video processing)
-
-## Security Notice
-
-This project uses environment variables to store sensitive configuration. Never commit `.env.local` files to version control. Always use the provided `.env.example` as a template.

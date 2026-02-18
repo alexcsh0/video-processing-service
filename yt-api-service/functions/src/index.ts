@@ -10,7 +10,8 @@ initializeApp();
 const firestore = new Firestore();
 const storage = new Storage();
 
-const rawVideoBucketName = process.env.RAW_VIDEOS_BUCKET || "alexcsh-yt-raw-videos";
+const rawVideoBucketName = process.env.RAW_VIDEOS_BUCKET ||
+  "alexcsh-yt-raw-videos";
 
 const videoCollectionId = "videos";
 

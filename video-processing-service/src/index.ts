@@ -10,6 +10,11 @@ app.use(express.json());
 
 const firestore = admin.firestore();
 
+// Add a simple test route
+app.get('/', (req, res) => {
+  res.send('Video processing service is running!');
+});
+
 app.post('/process-video', async (req, res) => {
    const startTime = Date.now(); // Start time for processing
 

@@ -9,10 +9,6 @@ RUN npm install
 
 COPY . .
 
-# Build TypeScript to JavaScript
-RUN npm run build
-
 EXPOSE 3000
 
-# Run the compiled JavaScript
-CMD ["node", "dist/index.js"]
+CMD ["npm", "start"]

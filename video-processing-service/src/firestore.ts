@@ -1,8 +1,8 @@
-import { credential } from "firebase-admin";
 import {initializeApp} from "firebase-admin/app";
 import {Firestore} from "firebase-admin/firestore";
 
-initializeApp({credential: credential.applicationDefault()});
+// Initialize Firebase Admin - will use Application Default Credentials in Cloud Run
+initializeApp();
 
 const firestore = new Firestore();
 
